@@ -3,6 +3,8 @@ import * as bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import { uploadToCloudinary } from "../../../utilites/uploadToCloudinary.js";
 
+import CryptoJS from "crypto-js";
+
 const transporter = nodemailer.createTransport({
   host: "smtp.ethereal.email",
   port: 587,
@@ -27,12 +29,16 @@ async function sendEmail(toUser, sub, txt) {
 export const register = async (req, res) => {
   try {
     //take body from ui
-    const { userName, email, password, confirmedPassword } = req.body;
+    const { userName, email, password, confirmedPassword, phone } = req.body;
     //validate password and confirmed password
     if (password != confirmedPassword) {
       return res
         .status(422)
         .json({ message: "password and confirmed password should be mathed" });
+    }
+
+    if (!phone) {
+      return res.status(422).json({ message: "phone is requeired" });
     }
     //check if the email exist in the database
     if (await userModel.findOne({ email })) {
@@ -57,12 +63,18 @@ export const register = async (req, res) => {
       parseInt(process.env.SALT_ROUNDED)
     );
 
+    const cryptoPhone = CryptoJS.AES.encrypt(
+      phone,
+      process.env.BCRYPT_SECRET_KEY
+    ).toString();
+
     //user here is a document
     const user = await userModel.create({
       userName,
       email,
       password: hashPasswod,
       image: photoUploadResult.secure_url,
+      phone: cryptoPhone,
     });
 
     sendEmail(email, "app message", "hello from saraha app");
