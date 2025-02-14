@@ -1,0 +1,25 @@
+saraha app
+DB...USER ...MESSAGE 
+register...EMAIL
+login
+hash ...password
+jwt
+...token
+env
+***************************************
+npm init -y 
+ npm i express 
+npm i mongoose  to work with mongodb
+npm i bcrypt
+npm i dotenv
+ npm install nodemailer
+ npm i multer
+***********************************************
+question
+app.use() ..||... app.all()
+
+
+assignments
+-integration email
+upload image
+https://www.npmjs.com/package/crypto-js phone
