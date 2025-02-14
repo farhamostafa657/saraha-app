@@ -1,30 +1,8 @@
 import userModel from "../../../DB/models/User.model.js";
 import * as bcrypt from "bcrypt";
-import nodemailer from "nodemailer";
 import { uploadToCloudinary } from "../../../utilites/uploadToCloudinary.js";
-
 import CryptoJS from "crypto-js";
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.ethereal.email",
-  port: 587,
-  secure: false, // true for port 465, false for other ports
-  auth: {
-    user: "maddison53@ethereal.email",
-    pass: "jn7jnAPss4f63QBp6D",
-  },
-});
-
-async function sendEmail(toUser, sub, txt) {
-  const info = await transporter.sendMail({
-    from: '"Maddison Foo Koch 👻" <maddison53@ethereal.email>', // sender address
-    to: toUser, // list of receivers
-    subject: sub, // Subject line
-    text: txt,
-    html: "<p>halloooo from saraha app</p>", // plain text body
-  });
-  console.log("Message sent: %s", info.messageId);
-}
+import seendEmailSaraha from "../../../utilites/sendEmail.js";
 
 export const register = async (req, res) => {
   try {
@@ -77,11 +55,10 @@ export const register = async (req, res) => {
       phone: cryptoPhone,
     });
 
-    sendEmail(email, "app message", "hello from saraha app");
-
     //transform document user to object
     const userObj = user.toObject();
     delete userObj.password;
+    seendEmailSaraha(userObj.email);
 
     res.status(200).json({ message: "welcome to register", userObj });
   } catch (error) {
