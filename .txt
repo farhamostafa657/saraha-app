@@ -6,6 +6,8 @@ hash ...password
 jwt
 ...token
 env
+validation
+........joi....express validators
 ***************************************
 npm init -y 
  npm i express 
@@ -14,6 +16,7 @@ npm i bcrypt
 npm i dotenv
  npm install nodemailer
  npm i multer
+ npm i joi
 ***********************************************
 question
 app.use() ..||... app.all()

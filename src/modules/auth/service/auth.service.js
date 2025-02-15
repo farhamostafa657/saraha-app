@@ -3,16 +3,18 @@ import * as bcrypt from "bcrypt";
 import { uploadToCloudinary } from "../../../utilites/uploadToCloudinary.js";
 import CryptoJS from "crypto-js";
 import seendEmailSaraha from "../../../utilites/sendEmail.js";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
     //take body from ui
     const { userName, email, password, confirmedPassword, phone } = req.body;
-    //validate password and confirmed password
+
     if (password != confirmedPassword) {
-      return res
-        .status(422)
-        .json({ message: "password and confirmed password should be mathed" });
+      //validate password and confirmed password
+      return res.status(422).json({
+        message: "password and confirmed password should be mathed",
+      });
     }
 
     if (!phone) {
@@ -58,9 +60,11 @@ export const register = async (req, res) => {
     //transform document user to object
     const userObj = user.toObject();
     delete userObj.password;
-    seendEmailSaraha(userObj.email);
-
-    res.status(200).json({ message: "welcome to register", userObj });
+    const token = jwt.sign({ email }, process.env.CONFIRM_EMAIL);
+    const url = `${req.protocol}://${req.hostname}:8888${req.baseUrl}/verify/${token}`;
+    // console.log(url);
+    seendEmailSaraha(userObj.email, url);
+    res.status(200).json({ message: "welcome to saraha app", userObj });
   } catch (error) {
     res.status(500).json({ message: "server error", error: error.message });
   }
@@ -81,13 +85,41 @@ export const login = async (req, res) => {
     if (!match) {
       return res.status(400).json({ message: "invalid password" });
     }
-    sendEmail(email, "saraha app", "hello from saraha app");
+
     const userObj = user.toObject();
     delete userObj.password;
-    return res.status(200).json({ message: "welcome to saraha app", userObj });
+
+    const token = jwt.sign(
+      { id: user._id, isLoggedIn: true },
+      process.env.TOKEN_SECRET_KEY,
+      {
+        expiresIn: "3h",
+      }
+    );
+
+    return res.status(200).json({ message: "welcome to saraha app", token });
   } catch (error) {
     return res
       .status(500)
       .json({ message: "server error", error: error.message });
   }
+};
+
+export const verify = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const decode = jwt.decode(token, process.env.CONFIRM_EMAIL);
+    const user = await userModel.findOne({ email: decode.email });
+    // console.log(user);
+    if (!user) return res.status(200).json({ message: "email not found" });
+    // user.confirmEmail=true
+    // user.save()
+    await userModel.findByIdAndUpdate(
+      user._id,
+      { confirmEmail: true },
+      { new: true }
+    );
+
+    res.status(200).json({ message: "updated" });
+  } catch (error) {}
 };

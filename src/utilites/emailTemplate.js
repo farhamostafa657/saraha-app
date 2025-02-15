@@ -1,4 +1,4 @@
-export const emailTemplate = () => {
+export const emailTemplate = (url) => {
   return `<!DOCTYPE html>
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="en">
 
@@ -556,7 +556,7 @@ export const emailTemplate = () => {
 <w:anchorlock/>
 <v:textbox inset="0px,0px,0px,0px">
 <center style="color:#225431; font-family:'Trebuchet MS', Tahoma, sans-serif; font-size:16px">
-<![endif]--><a href="http://www.example.com" target="_blank" style="text-decoration:none;display:inline-block;color:#225431;background-color:#ffd200;border-radius:5px;width:auto;border-top:0px solid transparent;font-weight:400;border-right:0px solid transparent;border-bottom:0px solid transparent;border-left:0px solid transparent;padding-top:5px;padding-bottom:5px;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;"><span style="padding-left:35px;padding-right:35px;font-size:16px;display:inline-block;letter-spacing:normal;"><span style="word-break:break-word;"><strong><span style="line-height: 28.8px;" data-mce-style>LEARN MORE</span></strong></span></span></a><!--[if mso]></center></v:textbox></v:roundrect><![endif]--></div>
+<![endif]--><a href=${url} target="_blank" style="text-decoration:none;display:inline-block;color:#225431;background-color:#ffd200;border-radius:5px;width:auto;border-top:0px solid transparent;font-weight:400;border-right:0px solid transparent;border-bottom:0px solid transparent;border-left:0px solid transparent;padding-top:5px;padding-bottom:5px;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;font-size:16px;text-align:center;mso-border-alt:none;word-break:keep-all;"><span style="padding-left:35px;padding-right:35px;font-size:16px;display:inline-block;letter-spacing:normal;"><span style="word-break:break-word;"><strong><span style="line-height: 28.8px;" data-mce-style>LEARN MORE</span></strong></span></span></a><!--[if mso]></center></v:textbox></v:roundrect><![endif]--></div>
 															</td>
 														</tr>
 													</table>
