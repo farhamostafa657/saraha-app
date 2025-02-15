@@ -1,5 +1,6 @@
 import connection from "./DB/connection.js";
 import authRoutes from "./modules/auth/auth.controller.js";
+import messageRoutes from "./modules/message/message.controller.js";
 import userRoutes from "./modules/user/user.controller.js";
 
 const bootStrap = (app, express) => {
@@ -11,6 +12,7 @@ const bootStrap = (app, express) => {
 
   app.use("/auth", authRoutes);
   app.use("/user", userRoutes);
+  app.use("/message", messageRoutes);
 
   connection(); // the connection with the data base
   app.all("*", (req, res) => {
